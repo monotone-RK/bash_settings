@@ -39,6 +39,7 @@ export HISTCONTROL=ignoredups
 export HISTIGNORE="cd*:pwd*:fg*:bg*"
 export HISTSIZE=10000
 
+
 ###############################################
 ## alias                                      #
 ###############################################
@@ -62,3 +63,40 @@ alias fgrep="fgrep --color=always"
 alias zgrep="zgrep --color=always"
 alias pdfgrep="pdfgrep --color=always"
 alias ls="ls --color"
+
+
+###############################################
+## Utility                                    #
+###############################################
+function add_path() {
+    if [[ -e "$1" ]]; then
+        export PATH="$(readlink -f "$1"):$PATH"
+    fi
+}
+
+function add_ldpath() {
+    if [[ -e "$1" ]]; then
+        export LD_LIBRARY_PATH="$(readlink -f "$1"):$LD_LIBRARY_PATH"
+    fi
+}
+
+
+###############################################
+## feature of "typeset -U PATH"               #
+###############################################
+if typeset -A &>/dev/null; then
+    typeset -A _paths
+    typeset _results
+    while read -r _p; do
+	if [[ -n ${_p} ]] && (( ${_paths["${_p}"]:-1} )); then
+	    _paths["${_p}"]=0
+	    _results=${_results}:${_p}
+	fi
+    done <<<"${PATH//:/$'\n'}"
+    PATH=${_results/:/}
+    unset -v _p _paths _results
+else
+    typeset _p=$(awk 'BEGIN{RS=":";ORS=":"} !x[$0]++' <<<"${PATH}:")
+    PATH=${_p%:*:}
+    unset -v _p
+fi

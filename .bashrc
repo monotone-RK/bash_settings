@@ -1,5 +1,10 @@
 # .bashrc
 
+###############################################
+## Bash Line Editor (begin)                   #
+###############################################
+[[ $- == *i* ]] && source ${HOME}/ble.sh/out/ble.sh --noattach
+
 # Source global definitions
 if [ -f /etc/bashrc ]; then
     . /etc/bashrc
@@ -13,11 +18,6 @@ PATH=$PATH:$HOME/.local/bin:$HOME/bin
 # export SYSTEMD_PAGER=
 
 # User specific aliases and functions
-
-###############################################
-## Bash Line Editor (begin)                   #
-###############################################
-[[ $- == *i* ]] && source ${HOME}/ble.sh/out/ble.sh --noattach
 
 ###############################################
 ## screen style                               #
@@ -109,28 +109,28 @@ fi
 ###############################################
 ## ssh-agent                                  #
 ###############################################
-SSH_AGENT_FILE="${HOME}/.ssh/.ssh-agent.$(hostname)"
-if [ -f ${SSH_AGENT_FILE} ]; then
-    eval $(cat ${SSH_AGENT_FILE})
-    ssh_agent_exist=0
-    for id in $(ps ax | grep 'ssh-agent' | sed -e 's/\([0-9]\+\).*/\1/'); do
-        if [ ${SSH_AGENT_PID} = ${id} ]; then
-            ssh_agent_exist=1
-        fi
-    done
-    if [ $ssh_agent_exist = 0 ]; then
-        rm -f ${SSH_AGENT_FILE}
-        ssh-agent >${SSH_AGENT_FILE}
-        chmod 600 ${SSH_AGENT_FILE}
-        eval $(cat ${SSH_AGENT_FILE})
-        ssh-add
-    fi
-else
-    ssh-agent >${SSH_AGENT_FILE}
-    chmod 600 ${SSH_AGENT_FILE}
-    eval $(cat ${SSH_AGENT_FILE})
-    ssh-add
-fi
+# SSH_AGENT_FILE="${HOME}/.ssh/.ssh-agent.$(hostname)"
+# if [ -f ${SSH_AGENT_FILE} ]; then
+#     eval $(cat ${SSH_AGENT_FILE})
+#     ssh_agent_exist=0
+#     for id in $(ps ax | grep 'ssh-agent' | sed -e 's/\([0-9]\+\).*/\1/'); do
+#         if [ ${SSH_AGENT_PID} = ${id} ]; then
+#             ssh_agent_exist=1
+#         fi
+#     done
+#     if [ $ssh_agent_exist = 0 ]; then
+#         rm -f ${SSH_AGENT_FILE}
+#         ssh-agent >${SSH_AGENT_FILE}
+#         chmod 600 ${SSH_AGENT_FILE}
+#         eval $(cat ${SSH_AGENT_FILE})
+#         ssh-add
+#     fi
+# else
+#     ssh-agent >${SSH_AGENT_FILE}
+#     chmod 600 ${SSH_AGENT_FILE}
+#     eval $(cat ${SSH_AGENT_FILE})
+#     ssh-add
+# fi
 
 ###############################################
 ## Bash Line Editor (end)                     #
